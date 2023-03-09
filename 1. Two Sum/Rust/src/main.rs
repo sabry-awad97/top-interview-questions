@@ -47,6 +47,22 @@ fn two_sum_o_1(nums: &[i32], target: i32) -> Option<(usize, usize)> {
     None
 }
 
+fn three_sum(nums: &[i32], target: i32) -> Option<(usize, usize, usize)> {
+    // Loop through each element of the input array
+    for i in 0..nums.len() {
+        // Calculate the remaining sum needed to reach the target
+        let remaining = target - nums[i];
+        // Use the two_sum function to find a pair of elements that add up to the remaining sum,
+        // starting from the next element after the current element
+        if let Some((j, k)) = two_sum(&nums[i + 1..], remaining) {
+            // If a pair is found, return a tuple containing the indices of the three elements
+            return Some((i, i + j + 1, i + k + 1));
+        }
+    }
+    // If no solution is found, return None
+    None
+}
+
 fn main() {
     let nums = vec![1, 2, 3, 4];
     let target = 5;
@@ -81,7 +97,7 @@ mod tests {
     }
 
     #[test]
-    fn test_two_sum() {
+    fn test_two_sum_o_1() {
         // Test case 1: Basic example
         let nums = vec![2, 7, 11, 15];
         let target = 9;
@@ -94,6 +110,23 @@ mod tests {
         let target = 4;
         let expected = None;
         let result = two_sum_o_1(&nums, target);
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_three_sum() {
+        // Test case 1: Basic example
+        let nums = vec![-1, 0, 1, 2, -1, -4];
+        let target = 3;
+        let expected = Some((1, 2, 3));
+        let result = three_sum(&nums, target);
+        assert_eq!(result, expected);
+
+        // Test case 2: No solution exists
+        let nums = vec![1, 2, 3, 4, 5];
+        let target = 0;
+        let expected = None;
+        let result = three_sum(&nums, target);
         assert_eq!(result, expected);
     }
 }
